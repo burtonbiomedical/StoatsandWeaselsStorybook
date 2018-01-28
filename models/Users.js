@@ -8,8 +8,7 @@ const UserSchema = new Schema({
     required: true
   },
   emails: {
-    type: String,
-    required: true
+    type: String
   },
   firstName: {
     type: String
