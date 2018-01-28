@@ -1,5 +1,6 @@
 //Imports
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
@@ -54,13 +55,18 @@ app.use((req, res, next) => {
   next();
 });
 
+//Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 //ROUTES
 const auth = require('./routes/auth');
 const index = require('./routes/index');
+const stories = require('./routes/stories')
 
 //Use routes
 app.use('/auth', auth);
-app.use('/', index)
+app.use('/', index);
+app.use('/stories', stories);
 
 //PORT
 const port = process.env.PORT || 5000;
