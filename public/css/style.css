@@ -27,3 +27,8 @@ footer{
 #delete-form{
   display: inline;
 }
+
+.pawprint{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

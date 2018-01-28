@@ -1,4 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const mongoose = require('mongoose');
 const keys = require('./keys');
 //Load user model
@@ -33,7 +34,19 @@ module.exports = function(passport){
           new User(newUser).save().then(user => done(null, user));
         }
       })
-    })
+    }));
+
+    passport.use(new FacebookStrategy({
+      clientID: 535052946873906,
+      clientSecret: "c72bae055f126afb59372a94eccb716c",
+      callbackURL: "/auth/facebook/callback"
+    },
+    (accessToken, refreshToken, profile, done) => {
+      console.log(profile);
+      }, (err, user) => {
+        console.log(err)
+        return done(err, user);
+      })
   );
 
   passport.serializeUser((user, done) => {

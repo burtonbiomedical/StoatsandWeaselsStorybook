@@ -24,4 +24,12 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
+router.get('/facebook', passport.authenticate('facebook'));
+
+router.get('/facebook/callback',
+passport.authenticate('facebook', {failureRedirect: '/'}),(req, res) => {
+  //Successful authentication, redirect to dashboard
+  res.redirect('/dashboard');
+});
+
 module.exports = router;
