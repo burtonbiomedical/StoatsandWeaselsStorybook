@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 const UserSchema = new Schema({
-  googleID: {
+  socialID: {
     type: String,
     required: true
   },

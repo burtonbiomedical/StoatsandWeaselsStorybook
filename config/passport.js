@@ -15,7 +15,7 @@ module.exports = function(passport){
     }, (accessToken, refreshToken, profile, done) => {
       const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
       const newUser = {
-        googleID: profile.id,
+        socialID: profile.id,
         firstName: profile.name.givenName,
         lastName: profile.name.familyName,
         emails: profile.emails[0].value,
@@ -24,7 +24,7 @@ module.exports = function(passport){
 
       //Check for existing user
       User.findOne({
-        googleID: profile.id
+        socialID: profile.id
       }).then(user => {
         if(user){
           //Return user
@@ -39,15 +39,25 @@ module.exports = function(passport){
     passport.use(new FacebookStrategy({
       clientID: keys.fbClientID,
       clientSecret: keys.fbSecret,
-      callbackURL: "/auth/facebook/callback"
+      callbackURL: "/auth/facebook/callback",
+      proxy: true
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log(accessToken);
       console.log(profile);
-      }, (err, user) => {
-        console.log(err)
-        return done(err, user);
+      //Check for existing user
+      User.findOne({
+        socialID: profile.id
+      }).then(user => {
+        if(user){
+          //Return user
+          done(null, user);
+        }else{
+          //Create user
+          new User(newUser).save().then(user => done(null, user));
+        }
       })
-  );
+    }));
 
   passport.serializeUser((user, done) => {
     done(null, user.id);
